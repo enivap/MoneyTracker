@@ -47,6 +47,12 @@ html, body {
   margin: 0 auto;
 }
 
+/* ===== Views ===== */
+.view { display: none; animation: fadeIn 0.3s ease-out; overflow-x: hidden; }
+.view.active { display: block; }
+
+@keyframes fadeIn {
+
 /* ===== Status Bar ===== */
 .status-bar {
   display: flex;
@@ -172,6 +178,7 @@ html, body {
 .main-scroll {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 0 16px 100px 16px;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
@@ -179,11 +186,7 @@ html, body {
 .main-scroll::-webkit-scrollbar { display: none; }
 .main-scroll { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* ===== Views ===== */
-.view { display: none; animation: fadeIn 0.3s ease-out; }
-.view.active { display: block; }
 
-@keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
