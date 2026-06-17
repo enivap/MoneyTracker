@@ -242,7 +242,11 @@ function showView(viewId) {
   document.querySelectorAll(".nav-item").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.target === viewId);
   });
-  document.getElementById("mainScroll").scrollTop = 0;
+  const mainScroll = document.getElementById("mainScroll");
+  mainScroll.scrollTop = 0;
+  // Lock scroll on Add view so keyboard doesn't push layout around
+  const noScroll = ["add", "detail"];
+  mainScroll.style.overflowY = noScroll.includes(viewId) ? "hidden" : "auto";
 }
 
 document.querySelectorAll(".nav-item").forEach((btn) => {
