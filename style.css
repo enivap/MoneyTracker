@@ -1104,7 +1104,17 @@ html, body {
   }
 }
 
-/* ===== Custom Category Add Button ===== */
+/* ===== Add view: fixed height, internal scroll only ===== */
+#viewAdd {
+  display: none;
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+#viewAdd.active {
+  display: flex;
+  flex-direction: column;
+}
 .cat-item-add {
   border: 2px dashed var(--primary) !important;
   background: rgba(0,102,255,0.04) !important;
