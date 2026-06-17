@@ -1111,12 +1111,19 @@ html, body {
 #viewAdd {
   display: none;
   height: 100%;
+  overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  max-width: 100%;
 }
 #viewAdd.active {
   display: flex;
   flex-direction: column;
+}
+#viewAdd * {
+  max-width: 100%;
+  box-sizing: border-box;
 }
 .cat-item-add {
   border: 2px dashed var(--primary) !important;
