@@ -649,12 +649,12 @@ function openAddCustomCategoryModal(type) {
        <label>ไอคอน (Emoji)</label>
        <div style="display:flex;align-items:center;gap:10px;margin-top:6px;">
          <div id="emojiPreview" style="font-size:32px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:#f0f0f0;border-radius:12px;">🏷️</div>
-         <input type="text" id="newCatEmoji" class="input-field" placeholder="วาง emoji ที่นี่ เช่น 🎯 🏖️ 🎸"
+         <input type="text" id="newCatEmoji" class="input-field" placeholder="วาง emoji ที่นี่ "
            style="flex:1;"
            maxlength="8" />
        </div>
        <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">
-         💡 เปิดแป้นพิมพ์ emoji: Windows = Win+. &nbsp;|&nbsp; Mac = Cmd+Ctrl+Space &nbsp;|&nbsp; มือถือ = กดปุ่ม 😊
+         
        </div>
      </div>`,
     "เพิ่มหมวดหมู่",
