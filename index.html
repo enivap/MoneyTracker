@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <title>Money Tracker</title>
+    <link rel="icon" type="image/png" href="logo.png" />
+    <link rel="apple-touch-icon" href="logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- Status Bar -->
+      <div class="status-bar">
+        <span class="time" id="statusTime">--:--</span>
+        <div class="status-icons">
+          <span class="material-symbols-outlined">signal_cellular_alt</span>
+          <span class="material-symbols-outlined">wifi</span>
+          <span class="material-symbols-outlined">battery_full</span>
+        </div>
+      </div>
+
+      <!-- Top Bar -->
+      <div class="top-bar">
+        <div class="account-selector" id="accountSelector">
+          <span id="currentAccountName">บัญชีหลัก</span>
+          <span class="material-symbols-outlined" style="font-size: 18px"
+            >expand_more</span
+          >
+        </div>
+        <div class="month-nav">
+          <button id="monthPrev">
+            <span class="material-symbols-outlined">chevron_left</span>
+          </button>
+          <span id="currentMonthDisplay">พฤษภาคม 2567</span>
+          <button id="monthNext">
+            <span class="material-symbols-outlined">chevron_right</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Account Dropdown -->
+      <div class="account-dropdown" id="accountDropdown" style="display: none">
+        <div id="accountListDropdown"></div>
+        <button class="add-account-btn" id="addAccountFromDropdown">
+          ➕ เพิ่มบัญชี
+        </button>
+        <button class="add-account-btn" id="manageAccountFromDropdown" style="border-top:none;color:var(--text-muted);">
+          ⚙️ จัดการบัญชี
+        </button>
+      </div>
+
+      <!-- Main Scroll -->
+      <div class="main-scroll" id="mainScroll">
+        <!-- ===== DASHBOARD ===== -->
+        <div class="view active" id="viewDashboard">
+          <div class="summary-card">
+            <div class="summary-top">
+              <div>
+                <span class="label">สรุปภาพรวม</span>
+                <span class="month-label" id="dashMonthLabel"
+                  >พฤษภาคม 2567</span
+                >
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <button id="dashDeleteAccountBtn" title="ลบบัญชีนี้" style="background:rgba(255,255,255,0.15);border:none;border-radius:10px;padding:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;">
+                  <span class="material-symbols-outlined" style="font-size:20px;color:white;">delete</span>
+                </button>
+                <div class="summary-icon">
+                  <span class="material-symbols-outlined">account_balance_wallet</span>
+                </div>
+              </div>
+            </div>
+            <div class="summary-body">
+              <div class="summary-row">
+                <div>
+                  <p class="label-small">รายรับรวม</p>
+                  <p class="value-large income" id="dashIncome">0.00</p>
+                </div>
+                <div>
+                  <p class="label-small">รายจ่ายรวม</p>
+                  <p class="value-large expense" id="dashExpense">0.00</p>
+                </div>
+              </div>
+              <div class="divider-light"></div>
+              <div>
+                <p class="label-small">คงเหลือ</p>
+                <p class="value-large balance" id="dashBalance">0.00</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card app-card">
+            <h2 class="card-title">หมวดหมู่รายจ่ายยอดนิยม</h2>
+            <div class="popular-content">
+              <div class="donut-container">
+                <canvas id="dashDonutCanvas" width="120" height="120"></canvas>
+              </div>
+              <div class="legend-list" id="dashLegend"></div>
+            </div>
+          </div>
+
+          <div class="recent-section">
+            <div class="recent-header">
+              <h2 class="card-title">รายการล่าสุด</h2>
+              <button class="see-all-btn" id="gotoListBtn">ดูทั้งหมด</button>
+            </div>
+            <div class="transaction-list" id="dashRecentList"></div>
+          </div>
+        </div>
+
+        <!-- ===== ADD ===== -->
+        <div class="view" id="viewAdd">
+          <div class="add-header">
+            <button class="back-btn" data-back="dashboard">
+              <span class="material-symbols-outlined">arrow_back_ios_new</span>
+            </button>
+            <span class="add-title" id="addTitle">เพิ่มรายการ</span>
+            <div style="width: 40px"></div>
+          </div>
+
+          <div class="toggle-group">
+            <button class="toggle-btn active" data-type="expense">
+              รายจ่าย
+            </button>
+            <button class="toggle-btn" data-type="income">รายรับ</button>
+            <button class="toggle-btn" data-type="transfer">โอนเงิน</button>
+          </div>
+
+          <div class="input-group">
+            <label>จำนวนเงิน</label>
+            <div class="input-with-icon">
+              <span class="currency-symbol">฿</span>
+              <input
+                type="number"
+                id="addAmount"
+                placeholder="0.00"
+                class="input-field"
+                step="0.01"
+              />
+            </div>
+          </div>
+
+          <div id="transferSection" style="display:none;"></div>
+
+          <div class="input-group" id="categorySection">
+            <label>หมวดหมู่</label>
+            <div class="category-grid" id="categoryGrid"></div>
+          </div>
+
+          <div class="input-group row-2">
+            <div>
+              <label>วันที่</label>
+              <input type="date" id="addDate" class="input-field" />
+            </div>
+            <div>
+              <label>เวลา</label>
+              <input type="time" id="addTime" class="input-field" />
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label>โน้ต</label>
+            <input
+              type="text"
+              id="addNote"
+              placeholder="เพิ่มรายละเอียด..."
+              class="input-field"
+            />
+          </div>
+
+          <button class="btn-save" id="saveTransaction">บันทึกรายการ</button>
+          <button class="btn-cancel" id="cancelEdit" style="display: none">
+            ยกเลิกการแก้ไข
+          </button>
+        </div>
+
+        <!-- ===== LIST ===== -->
+        <div class="view" id="viewList">
+          <div class="list-header">
+            <button class="back-btn" data-back="dashboard">
+              <span class="material-symbols-outlined">arrow_back_ios_new</span>
+            </button>
+            <span class="list-title">ประวัติการเงิน</span>
+            <div style="width: 40px"></div>
+          </div>
+
+          <!-- Filter tabs -->
+          <div class="list-filter-tabs">
+            <button class="list-filter-btn active" data-filter="all">
+              ทั้งหมด
+            </button>
+            <button class="list-filter-btn" data-filter="income">รายรับ</button>
+            <button class="list-filter-btn" data-filter="expense">
+              รายจ่าย
+            </button>
+          </div>
+
+          <!-- Summary -->
+          <div class="list-summary glass-card">
+            <div class="list-summary-row">
+              <span>รายรับรวม</span>
+              <span class="income" id="listIncomeTotal">0.00</span>
+            </div>
+            <div class="list-summary-row">
+              <span>รายจ่ายรวม</span>
+              <span class="expense" id="listExpenseTotal">0.00</span>
+            </div>
+          </div>
+
+          <div id="fullListContainer"></div>
+        </div>
+
+        <!-- ===== STATS ===== -->
+        <div class="view" id="viewStats">
+          <div class="stats-header">
+            <span class="stats-title">สถิติ</span>
+            <span class="stats-month" id="statsMonthLabel">พฤษภาคม 2567</span>
+          </div>
+
+          <div class="stats-tabs">
+            <button class="stats-tab active" data-stats="expense">
+              รายจ่าย
+            </button>
+            <button class="stats-tab" data-stats="income">รายรับ</button>
+          </div>
+
+          <div class="glass-card stats-summary-card">
+            <p class="stats-label" id="statsLabel">รายจ่ายรวม</p>
+            <p class="stats-value expense" id="statsTotal">0.00</p>
+
+            <div class="donut-large-container">
+              <canvas id="statsDonutCanvas" width="200" height="200"></canvas>
+            </div>
+
+            <div class="legend-grid" id="statsLegend"></div>
+          </div>
+        </div>
+
+        <!-- ===== CALENDAR ===== -->
+        <div class="view" id="viewCalendar">
+          <div class="cal-filter">
+            <button class="cal-filter-btn active" data-filter="all">
+              ทั้งหมด
+            </button>
+            <button class="cal-filter-btn" data-filter="income">รายรับ</button>
+            <button class="cal-filter-btn" data-filter="expense">
+              รายจ่าย
+            </button>
+          </div>
+
+          <div class="glass-card calendar-card">
+            <div class="calendar-grid" id="calendarGrid"></div>
+          </div>
+
+          <div class="glass-card cal-day-detail" id="calDayDetail">
+            <div class="cal-day-label">เลือกวันที่เพื่อดูรายการ</div>
+          </div>
+        </div>
+
+        <!-- ===== ACCOUNTS ===== -->
+        <div class="view" id="viewAccounts">
+          <div class="accounts-header">
+            <span class="accounts-title">บัญชีของฉัน</span>
+            <button class="btn-add-account" id="addAccountBtn">
+              <span class="material-symbols-outlined">add_circle</span>
+              เพิ่มบัญชี
+            </button>
+          </div>
+          <div id="accountList" class="account-list"></div>
+        </div>
+
+        <!-- ===== DETAIL ===== -->
+        <div class="view" id="viewDetail">
+          <div class="detail-header">
+            <button class="back-btn" data-back="list">
+              <span class="material-symbols-outlined">arrow_back_ios_new</span>
+            </button>
+            <span class="detail-title">รายละเอียด</span>
+            <button class="more-btn" id="detailEditBtn">
+              <span class="material-symbols-outlined">edit_square</span>
+            </button>
+          </div>
+          <div id="detailContainer"></div>
+        </div>
+      </div>
+
+      <!-- ===== BOTTOM NAV ===== -->
+      <nav class="bottom-nav">
+        <button class="nav-item active" data-target="dashboard">
+          <span class="material-symbols-outlined">grid_view</span>
+          <span>หน้าหลัก</span>
+        </button>
+        <button class="nav-item" data-target="list">
+          <span class="material-symbols-outlined">format_list_bulleted</span>
+          <span>รายการ</span>
+        </button>
+        <div class="nav-add-wrapper">
+          <button class="nav-add-btn" id="addNavBtn">
+            <span class="material-symbols-outlined">add</span>
+          </button>
+        </div>
+        <button class="nav-item" data-target="stats">
+          <span class="material-symbols-outlined">pie_chart</span>
+          <span>สถิติ</span>
+        </button>
+        <button class="nav-item" data-target="calendar">
+          <span class="material-symbols-outlined">calendar_today</span>
+          <span>ปฏิทิน</span>
+        </button>
+      </nav>
+
+      <!-- Modal -->
+      <div class="modal-overlay" id="modalOverlay" style="display: none">
+        <div class="modal-content">
+          <h3 id="modalTitle">เพิ่มบัญชี</h3>
+          <div id="modalBody"></div>
+          <div class="modal-actions">
+            <button class="modal-cancel" id="modalCancel">ยกเลิก</button>
+            <button class="modal-confirm" id="modalConfirm">ยืนยัน</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+      // อัปเดตนาฬิกาทุกวินาที
+      function updateStatusTime() {
+        const now = new Date();
+        const h = String(now.getHours()).padStart(2, "0");
+        const m = String(now.getMinutes()).padStart(2, "0");
+        document.getElementById("statusTime").textContent = h + ":" + m;
+      }
+      setInterval(updateStatusTime, 1000);
+      updateStatusTime();
+
+      // ปุ่ม "ดูทั้งหมด"
+      document
+        .getElementById("gotoListBtn")
+        ?.addEventListener("click", function () {
+          showView("list");
+        });
+    </script>
+  </body>
+</html>
