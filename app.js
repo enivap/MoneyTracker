@@ -577,7 +577,6 @@ function renderAddForm() {
           <label>บัญชีปลายทาง</label>
           <select id="transferTo" class="input-field">${opts}</select>
         </div>`;
-      // Default to different accounts
       if (accounts.length >= 2) {
         document.getElementById("transferFrom").value = accounts[0].id;
         document.getElementById("transferTo").value = accounts[1].id;
@@ -589,25 +588,24 @@ function renderAddForm() {
 
     const cats = getCategories()[type] || getCategories().expense;
     grid.innerHTML = cats
-      .map(
-        (c) => `
+      .map((c) => `
           <div class="cat-item" data-cat="${c}">
               <span class="cat-icon" style="background:#F0F0F0;">${getCategoryIcon(c)}</span>
               <span>${c}</span>
           </div>
-      `,
-      )
-      .join("") +
+      `).join("") +
       `<div class="cat-item cat-item-add" id="addCustomCatBtn">
           <span class="cat-icon" style="background:#F0F0F0;">➕</span>
           <span>เพิ่ม</span>
       </div>`;
 
+    // Auto-select first category
+    const firstCat = grid.querySelector(".cat-item:not(.cat-item-add)");
+    if (firstCat) firstCat.classList.add("selected");
+
     grid.querySelectorAll(".cat-item:not(.cat-item-add)").forEach((el) => {
       el.addEventListener("click", function () {
-        grid
-          .querySelectorAll(".cat-item")
-          .forEach((c) => c.classList.remove("selected"));
+        grid.querySelectorAll(".cat-item").forEach((c) => c.classList.remove("selected"));
         this.classList.add("selected");
       });
     });
@@ -617,21 +615,20 @@ function renderAddForm() {
     });
   }
 
-  document.querySelectorAll(".toggle-btn").forEach((btn) => {
-    btn.addEventListener("click", function () {
-      document
-        .querySelectorAll(".toggle-btn")
-        .forEach((b) => b.classList.remove("active"));
-      this.classList.add("active");
-      renderAddForm();
-    });
-  });
-
   if (!document.getElementById("addDate").value)
     document.getElementById("addDate").value = getToday();
   if (!document.getElementById("addTime").value)
     document.getElementById("addTime").value = getNowTime();
 }
+
+// Attach toggle-btn listeners once only
+document.querySelectorAll(".toggle-btn").forEach((btn) => {
+  btn.addEventListener("click", function () {
+    document.querySelectorAll(".toggle-btn").forEach((b) => b.classList.remove("active"));
+    this.classList.add("active");
+    renderAddForm();
+  });
+});
 
 // ============================================================
 //  CUSTOM CATEGORIES
@@ -649,12 +646,12 @@ function openAddCustomCategoryModal(type) {
        <label>ไอคอน (Emoji)</label>
        <div style="display:flex;align-items:center;gap:10px;margin-top:6px;">
          <div id="emojiPreview" style="font-size:32px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:#f0f0f0;border-radius:12px;">🏷️</div>
-         <input type="text" id="newCatEmoji" class="input-field" placeholder="วาง emoji ที่นี่ "
+         <input type="text" id="newCatEmoji" class="input-field" placeholder="วาง emoji ที่นี่ เช่น 🎯 🏖️ 🎸"
            style="flex:1;"
            maxlength="8" />
        </div>
        <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">
-         
+         💡 เปิดแป้นพิมพ์ emoji: Windows = Win+. &nbsp;|&nbsp; Mac = Cmd+Ctrl+Space &nbsp;|&nbsp; มือถือ = กดปุ่ม 😊
        </div>
      </div>`,
     "เพิ่มหมวดหมู่",
