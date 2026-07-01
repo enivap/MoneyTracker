@@ -1,51 +1,14 @@
 // ============================================================
 //  DATA LAYER
 // ============================================================
-const STORAGE_KEY = "moneyTrackerV3";
+const STORAGE_KEY = "moneyTrackerV4";
 
 function getDefaultData() {
-  const today = new Date().toISOString().split("T")[0];
-  const time = new Date().toTimeString().slice(0, 5);
   return {
     accounts: [
       { id: "acc1", name: "บัญชีหลัก", color: "#2D6A4F" },
-      { id: "acc2", name: "บัญชีเงินสด", color: "#F2994A" },
     ],
-    transactions: [
-      {
-        id: "t1",
-        accountId: "acc1",
-        type: "income",
-        amount: 45000,
-        category: "เงินเดือน",
-        date: today,
-        time: "09:00",
-        note: "เงินเดือน",
-        createdAt: Date.now(),
-      },
-      {
-        id: "t2",
-        accountId: "acc1",
-        type: "expense",
-        amount: 60,
-        category: "อาหาร",
-        date: today,
-        time: "12:30",
-        note: "",
-        createdAt: Date.now() + 1,
-      },
-      {
-        id: "t3",
-        accountId: "acc2",
-        type: "expense",
-        amount: 200,
-        category: "เดินทาง",
-        date: today,
-        time: "08:15",
-        note: "",
-        createdAt: Date.now() + 2,
-      },
-    ],
+    transactions: [],
     currentAccountId: "acc1",
     currentYear: new Date().getFullYear(),
     currentMonth: new Date().getMonth() + 1,
