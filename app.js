@@ -186,6 +186,8 @@ function drawDonut(canvas, data, colors) {
 // ============================================================
 //  NAVIGATION
 // ============================================================
+document.addEventListener("DOMContentLoaded", function () {
+
 const views = {
   dashboard: document.getElementById("viewDashboard"),
   add: document.getElementById("viewAdd"),
@@ -1384,3 +1386,5 @@ function renderAll() {
 
 renderAll();
 showView("dashboard");
+
+}); // end DOMContentLoaded
